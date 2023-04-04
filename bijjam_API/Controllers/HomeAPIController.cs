@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace bijjam_API.Controllers
 {
+    //vinay
     //[Route("api/[controller]")]
     [Route("api/HomeAPI")]
     [ApiController]
