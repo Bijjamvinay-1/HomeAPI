@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace bijjam_API.Controllers
 {
-    //vinay
+    
     //[Route("api/[controller]")]
     [Route("api/HomeAPI")]
     [ApiController]
@@ -42,6 +42,32 @@ namespace bijjam_API.Controllers
             return Ok(Home);
         }
 
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<HomeDTO> CreateHome([FromBody]HomeDTO homeDto)
+        
+        {
+            if (homeDto == null)
+            { 
+                return BadRequest();
+            }
+            if (homeDto.Id > 0)
+            { 
+                return StatusCode(StatusCodes.Status500InternalServerError); 
+            }
+            //incrementing ID
+            homeDto.Id = HomeStore.HomeList.OrderByDescending(u => u.Id).FirstOrDefault().Id + 1;
+            
+            HomeStore.HomeList.Add(homeDto);    
+
+
+            return Ok(homeDto); 
+
+           
+
+        }
 
 
     }
