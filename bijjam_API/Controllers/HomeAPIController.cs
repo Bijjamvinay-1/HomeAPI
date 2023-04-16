@@ -1,15 +1,19 @@
 ﻿using bijjam_API.Data;
 using bijjam_API.Model;
 using bijjam_API.Model.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web.Resource;
+
 
 namespace bijjam_API.Controllers
 {
-    
-    //[Route("api/[controller]")]
+    //[RequiredScope(RequiredScopesConfigurationKey ="AzureAd:Scopes")]
+    //[Authorize]
+    [ApiController]
     [Route("api/HomeAPI")]
-    [ApiController] // validation
+    
 
     public class HomeAPIController : ControllerBase
     {
