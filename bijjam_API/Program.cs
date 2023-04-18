@@ -11,9 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 //    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 // Add services to the container.
-Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
-    .WriteTo.File("log/Home.txt",rollingInterval: RollingInterval.Day).CreateLogger();    
-builder.Host.UseSerilog();  
+//Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
+//    .WriteTo.File("log/Home.txt",rollingInterval: RollingInterval.Day).CreateLogger();    
+//builder.Host.UseSerilog();  
 
 builder.Services.AddControllers(option => { 
     option.ReturnHttpNotAcceptable = true;
