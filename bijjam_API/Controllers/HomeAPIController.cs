@@ -9,8 +9,7 @@ using Microsoft.Identity.Web.Resource;
 
 namespace bijjam_API.Controllers
 {
-    //[RequiredScope(RequiredScopesConfigurationKey ="AzureAd:Scopes")]
-    //[Authorize]
+   
     [ApiController]
     [Route("api/HomeAPI")]
     
