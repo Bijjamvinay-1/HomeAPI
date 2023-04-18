@@ -9,18 +9,23 @@ using Microsoft.Identity.Web.Resource;
 
 namespace bijjam_API.Controllers
 {
-    //[RequiredScope(RequiredScopesConfigurationKey ="AzureAd:Scopes")]
-    //[Authorize]
+   
     [ApiController]
     [Route("api/HomeAPI")]
     
 
     public class HomeAPIController : ControllerBase
     {
+        private readonly ILogger<HomeAPIController> _logger;
+        public HomeAPIController(ILogger<HomeAPIController> logger)
+        {
+            _logger = logger;
+        }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult< IEnumerable<HomeDTO>> GetHomes() 
         {
+            _logger.LogInformation("getting Homes");
             return Ok(HomeStore.HomeList);
        
         }
@@ -35,6 +40,7 @@ namespace bijjam_API.Controllers
         {
             if (id == 0) 
             {
+                _logger.LogInformation("geting error on ID" +id);
                 return BadRequest();
             
             }
