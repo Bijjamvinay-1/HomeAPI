@@ -1,5 +1,5 @@
 ﻿using bijjam_API.Data;
-using bijjam_API.Logging;
+
 using bijjam_API.Model;
 using bijjam_API.Model.DTO;
 using Microsoft.AspNetCore.Authorization;
@@ -19,16 +19,16 @@ namespace bijjam_API.Controllers
 
     public class HomeAPIController : ControllerBase
     {
-        private readonly ILogging _logger;
-        public HomeAPIController(ILogging logger)
+        
+        public HomeAPIController()
         {
-            _logger = logger;
+            
         }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult< IEnumerable<HomeDTO>> GetHomes() 
         {
-            _logger.Log("getting Homes"," ");
+           
             return Ok(HomeStore.HomeList);
        
 
@@ -44,7 +44,7 @@ namespace bijjam_API.Controllers
         {
             if (id == 0) 
             {
-                _logger.Log("geting error on ID" +id,"error");
+              
                 return BadRequest();
             
             }

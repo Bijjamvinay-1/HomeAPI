@@ -1,5 +1,5 @@
 
-using bijjam_API.Logging;
+
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
@@ -27,7 +27,7 @@ builder.Services.AddControllers(option => {
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<ILogging, LoggingV2>();
+
 //AddTransient everytime create object.
 //builder.Services.AddSwaggerGen(
 //    c => 
