@@ -4,6 +4,7 @@ using bijjam_API.Model.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web.Resource;
 
 
@@ -16,13 +17,18 @@ namespace bijjam_API.Controllers
 
     public class HomeAPIController : ControllerBase
     {
-        
+        private readonly ApplicationDbContext _db;
+        public HomeAPIController(ApplicationDbContext db)
+        {
+            _db = db;
+        }
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult< IEnumerable<HomeDTO>> GetHomes() 
         {
            
-            return Ok(HomeStore.HomeList);
+            return Ok(_db.Homes.ToList());
        
         }
 
@@ -40,7 +46,7 @@ namespace bijjam_API.Controllers
                 return BadRequest();
             
             }
-            var Home = HomeStore.HomeList.FirstOrDefault(u => u.Id == id);
+            var Home = _db.Homes.FirstOrDefault(u => u.Id == id);
             if (Home == null)
             { 
                 return NotFound();  
@@ -61,7 +67,7 @@ namespace bijjam_API.Controllers
             //        return BadRequest(ModelState);  
             //    }
 
-            if (HomeStore.HomeList.FirstOrDefault(u => u.Name.ToLower() == homeDto.Name.ToLower()) != null)
+            if (_db.Homes.ToList().FirstOrDefault(u => u.Name.ToLower() == homeDto.Name.ToLower()) != null)
             {
 
                 ModelState.AddModelError(" ", "Home Alredy Exists!");
@@ -77,13 +83,23 @@ namespace bijjam_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
             //incrementing ID
-            homeDto.Id = HomeStore.HomeList.OrderByDescending(u => u.Id).FirstOrDefault().Id + 1;
-
-            HomeStore.HomeList.Add(homeDto);
+            Home modle = new ()
+            { 
+                Amenity = homeDto.Amenity, 
+                Details = homeDto.Details,
+                Id = homeDto.Id,
+                ImageUrl = homeDto.ImageUrl,    
+                Name = homeDto.Name,    
+                Occupancy = homeDto.Occupancy,  
+                Rate = homeDto.Rate,
+                Sqft = homeDto.Sqft,    
+            };
+            _db.Homes.Add(modle);
+            _db.SaveChanges();  
             //return Ok(homeDto);    
 
 
-           return CreatedAtRoute("GetHome", new { id = homeDto.Id }, homeDto);
+          return CreatedAtRoute("GetHome", new { id = homeDto.Id }, homeDto);
 
 
 
@@ -101,13 +117,14 @@ namespace bijjam_API.Controllers
                
 
             }
-            var home = HomeStore.HomeList.FirstOrDefault(u => u.Id == id);
+            var home = _db.Homes.FirstOrDefault(u => u.Id == id);
             if (home == null)
             { 
             return NotFound();  
             
             }
-            HomeStore.HomeList.Remove(home);    
+            _db.Homes.Remove(home); 
+            _db.SaveChanges(true);
             return NoContent(); // return ok() //using NoContent we can remove undocumented
         
         
@@ -125,11 +142,21 @@ namespace bijjam_API.Controllers
                 return BadRequest();
             
             }
-            var home = HomeStore.HomeList.FirstOrDefault(u => u.Id == id);
-            home.Name = homeDTO.Name;
-            home.Sqft = homeDTO.Sqft;
-            home.Occupancy = homeDTO.Occupancy;
+            Home modle = new()
+            {
+                Amenity = homeDTO.Amenity,
+                Details = homeDTO.Details,
+                Id = homeDTO.Id,
+                ImageUrl = homeDTO.ImageUrl,
+                Name = homeDTO.Name,
+                Occupancy = homeDTO.Occupancy,
+                Rate = homeDTO.Rate,
+                Sqft = homeDTO.Sqft,
+            };
+            _db.Homes.Update(modle);
+            _db.SaveChanges();
             return NoContent();
+
 
 
         }
@@ -144,13 +171,41 @@ namespace bijjam_API.Controllers
                 return BadRequest();
             
             }
-            var home = HomeStore.HomeList.FirstOrDefault(u => u.Id == id);
+            var home = _db.Homes.AsNoTracking().FirstOrDefault(u => u.Id == id);
+
+            HomeDTO homeDTO = new()
+            {
+                Amenity = home.Amenity,
+                Details = home.Details,
+                Id = home.Id,
+                ImageUrl = home.ImageUrl,
+                Name = home.Name,
+                Occupancy = home.Occupancy,
+                Rate = home.Rate,
+                Sqft = home.Sqft,
+            };
+
+
             if (home == null)
             { 
                 return BadRequest();    
             
             }
-            patchDTO.ApplyTo(home, ModelState); // if any error we can store in modelsate
+            patchDTO.ApplyTo(homeDTO, ModelState); // if any error we can store in modelsate
+            Home modle = new Home()
+            {
+                Amenity = homeDTO.Amenity,
+                Details = homeDTO.Details,
+                Id = homeDTO.Id,
+                ImageUrl = homeDTO.ImageUrl,
+                Name = homeDTO.Name,
+                Occupancy = homeDTO.Occupancy,
+                Rate = homeDTO.Rate,
+                Sqft = homeDTO.Sqft,
+            };
+            _db.Homes.Update(modle);
+            _db.SaveChanges();
+            return NoContent();
 
             if (!ModelState.IsValid)
             { 
