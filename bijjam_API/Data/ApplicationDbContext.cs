@@ -63,7 +63,7 @@ namespace bijjam_API.Data
                   CreatedDate = DateTime.Now,   
               },
               new Home
-              
+
               {
                   Id = 5,
                   Name = "Diamond Pool Home",
@@ -74,33 +74,8 @@ namespace bijjam_API.Data
                   Sqft = 1100,
                   Amenity = "",
                   CreatedDate = DateTime.Now,
-              },
-              new Home
-
-              {
-                  Id = 6,
-                  Name = "Diamoend Pool Home",
-                  Details = "Fusece 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
-                  ImageUrl = "https://dotnetmasteryimages.blob.covre.windows.net/bluevillaimages/villa2.jpg",
-                  Occupancy = 54,
-                  Rate = 6050,
-                  Sqft = 11500,
-                  Amenity = "",
-                  CreatedDate = DateTime.Now,
-              },
-               new Home
-
-               {
-                   Id = 7,
-                   Name = "Diamoefnd Pool Home",
-                   Details = "Fusfece 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
-                   ImageUrl = "https://doftnetmasteryimages.blob.covre.windows.net/bluevillaimages/villa2.jpg",
-                   Occupancy = 454,
-                   Rate = 60540,
-                   Sqft = 114500,
-                   Amenity = "",
-                   CreatedDate = DateTime.Now,
-               }
+              }
+             
 
                 );
         }
