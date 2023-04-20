@@ -59,7 +59,7 @@ namespace bijjam_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<HomeDTO> CreateHome([FromBody] HomeDTO homeDto)
+        public ActionResult<HomeDTO> CreateHome([FromBody] HomeCreateDTO homeDto)
 
         {
             //    if (!ModelState.IsValid)
@@ -78,16 +78,16 @@ namespace bijjam_API.Controllers
             {
                 return BadRequest();
             }
-            if (homeDto.Id > 0)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            //if (homeDto.Id > 0)
+            //{
+            //    return StatusCode(StatusCodes.Status500InternalServerError);
+            //}
             //incrementing ID
             Home modle = new ()
             { 
                 Amenity = homeDto.Amenity, 
                 Details = homeDto.Details,
-                Id = homeDto.Id,
+                //Id = homeDto.Id,
                 ImageUrl = homeDto.ImageUrl,    
                 Name = homeDto.Name,    
                 Occupancy = homeDto.Occupancy,  
@@ -99,7 +99,7 @@ namespace bijjam_API.Controllers
             //return Ok(homeDto);    
 
 
-          return CreatedAtRoute("GetHome", new { id = homeDto.Id }, homeDto);
+          return CreatedAtRoute("GetHome", new { id = modle.Id }, modle);
 
 
 
@@ -134,7 +134,7 @@ namespace bijjam_API.Controllers
         
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public IActionResult UpdateHome(int id , [FromBody]HomeDTO homeDTO) 
+        public IActionResult UpdateHome(int id , [FromBody]HomeUpdateDTO homeDTO) 
         {
 
             if (homeDTO == null || id != homeDTO.Id)
@@ -164,7 +164,7 @@ namespace bijjam_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public IActionResult UpdatePartialHome(int id, JsonPatchDocument<HomeDTO> patchDTO) 
+        public IActionResult UpdatePartialHome(int id, JsonPatchDocument<HomeUpdateDTO> patchDTO) 
         {
             if (patchDTO == null || id == 0)
             {
@@ -173,7 +173,7 @@ namespace bijjam_API.Controllers
             }
             var home = _db.Homes.AsNoTracking().FirstOrDefault(u => u.Id == id);
 
-            HomeDTO homeDTO = new()
+            HomeUpdateDTO homeDTO = new()
             {
                 Amenity = home.Amenity,
                 Details = home.Details,
