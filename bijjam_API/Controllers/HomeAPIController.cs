@@ -25,10 +25,10 @@ namespace bijjam_API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult< IEnumerable<HomeDTO>> GetHomes() 
+        public async Task<ActionResult< IEnumerable<HomeDTO>>>GetHomes() 
         {
            
-            return Ok(_db.Homes.ToList());
+            return Ok(await _db.Homes.ToListAsync());
        
         }
 
@@ -38,7 +38,7 @@ namespace bijjam_API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         //[ProducesResponseType(200, Type =typeof(HomeDTO))]
    
-        public ActionResult<HomeDTO> GetHome(int id) 
+        public async Task<ActionResult<HomeDTO>> GetHome(int id) 
         {
             if (id == 0) 
             {
@@ -46,7 +46,7 @@ namespace bijjam_API.Controllers
                 return BadRequest();
             
             }
-            var Home = _db.Homes.FirstOrDefault(u => u.Id == id);
+            var Home = await _db.Homes.FirstOrDefaultAsync(u => u.Id == id);
             if (Home == null)
             { 
                 return NotFound();  
@@ -59,7 +59,7 @@ namespace bijjam_API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<HomeDTO> CreateHome([FromBody] HomeCreateDTO homeDto)
+        public async Task<ActionResult<HomeDTO>> CreateHome([FromBody] HomeCreateDTO homeDto)
 
         {
             //    if (!ModelState.IsValid)
@@ -67,7 +67,7 @@ namespace bijjam_API.Controllers
             //        return BadRequest(ModelState);  
             //    }
 
-            if (_db.Homes.ToList().FirstOrDefault(u => u.Name.ToLower() == homeDto.Name.ToLower()) != null)
+            if (await _db.Homes.FirstOrDefaultAsync(u => u.Name.ToLower() == homeDto.Name.ToLower()) != null)
             {
 
                 ModelState.AddModelError(" ", "Home Alredy Exists!");
@@ -94,8 +94,8 @@ namespace bijjam_API.Controllers
                 Rate = homeDto.Rate,
                 Sqft = homeDto.Sqft,    
             };
-            _db.Homes.Add(modle);
-            _db.SaveChanges();  
+            await _db.Homes.AddAsync(modle);
+            await _db.SaveChangesAsync();  
             //return Ok(homeDto);    
 
 
@@ -109,7 +109,7 @@ namespace bijjam_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes. Status400BadRequest)]
-        public ActionResult <HomeDTO> DeleteHome(int id) 
+        public async Task<ActionResult <HomeDTO>> DeleteHome(int id) 
         {
             if (id == 0)
             {
@@ -117,14 +117,14 @@ namespace bijjam_API.Controllers
                
 
             }
-            var home = _db.Homes.FirstOrDefault(u => u.Id == id);
+            var home = await _db.Homes.FirstOrDefaultAsync(u => u.Id == id);
             if (home == null)
             { 
             return NotFound();  
             
             }
             _db.Homes.Remove(home); 
-            _db.SaveChanges(true);
+            await _db.SaveChangesAsync();
             return NoContent(); // return ok() //using NoContent we can remove undocumented
         
         
@@ -134,7 +134,7 @@ namespace bijjam_API.Controllers
         
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public IActionResult UpdateHome(int id , [FromBody]HomeUpdateDTO homeDTO) 
+        public async Task<IActionResult> UpdateHome(int id , [FromBody]HomeUpdateDTO homeDTO) 
         {
 
             if (homeDTO == null || id != homeDTO.Id)
@@ -154,8 +154,8 @@ namespace bijjam_API.Controllers
                 Sqft = homeDTO.Sqft,
             };
             _db.Homes.Update(modle);
-            _db.SaveChanges();
-            return NoContent();
+            await _db.SaveChangesAsync();
+             return NoContent();
 
 
 
@@ -164,14 +164,14 @@ namespace bijjam_API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public IActionResult UpdatePartialHome(int id, JsonPatchDocument<HomeUpdateDTO> patchDTO) 
+        public async Task<IActionResult> UpdatePartialHome(int id, JsonPatchDocument<HomeUpdateDTO> patchDTO) 
         {
             if (patchDTO == null || id == 0)
             {
                 return BadRequest();
             
             }
-            var home = _db.Homes.AsNoTracking().FirstOrDefault(u => u.Id == id);
+            var home = await _db.Homes.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
 
             HomeUpdateDTO homeDTO = new()
             {
@@ -204,8 +204,9 @@ namespace bijjam_API.Controllers
                 Sqft = homeDTO.Sqft,
             };
             _db.Homes.Update(modle);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return NoContent();
+
 
             if (!ModelState.IsValid)
             { 
