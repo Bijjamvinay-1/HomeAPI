@@ -2,6 +2,7 @@
 using bijjam_API.Data;
 using bijjam_API.Model;
 using bijjam_API.Model.DTO;
+using bijjam_API.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.JsonPatch;
@@ -19,11 +20,11 @@ namespace bijjam_API.Controllers
 
     public class HomeAPIController : ControllerBase
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IHomeRepository _dbHome;
         private readonly IMapper _mapper;
-        public HomeAPIController(ApplicationDbContext db, IMapper mapper)
+        public HomeAPIController(IHomeRepository dbHome, IMapper mapper)
         {
-            _db = db;
+            _dbHome = dbHome;
             _mapper = mapper;   
         }
 
@@ -32,7 +33,7 @@ namespace bijjam_API.Controllers
         public async Task<ActionResult< IEnumerable<HomeDTO>>>GetHomes() 
         {
            
-           IEnumerable<Home> homelist = await _db.Homes.ToListAsync();
+           IEnumerable<Home> homelist = await _dbHome.GetAllAsync();
             //Here we are mapping Home To HomeDto
             return Ok(_mapper.Map<List<HomeDTO>>(homelist));
        
@@ -52,7 +53,7 @@ namespace bijjam_API.Controllers
                 return BadRequest();
             
             }
-            var Home = await _db.Homes.FirstOrDefaultAsync(u => u.Id == id);
+            var Home = await _dbHome.GetAsync(u => u.Id == id);
             if (Home == null)
             { 
                 return NotFound();  
@@ -73,7 +74,7 @@ namespace bijjam_API.Controllers
             //        return BadRequest(ModelState);  
             //    }
 
-            if (await _db.Homes.FirstOrDefaultAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
+            if (await _dbHome.GetAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
             {
 
                 ModelState.AddModelError(" ", "Home Alredy Exists!");
@@ -90,7 +91,7 @@ namespace bijjam_API.Controllers
             //}
             //incrementing ID
 
-            Home model = _mapper.Map<Home>(createDTO);  
+            Home model = _mapper.Map<Home>(createDTO);
             //Home modle = new ()
             //{ 
             //    Amenity = createDTO.Amenity, 
@@ -102,8 +103,7 @@ namespace bijjam_API.Controllers
             //    Rate = createDTO.Rate,
             //    Sqft = createDTO.Sqft,    
             //};
-            await _db.Homes.AddAsync(model);
-            await _db.SaveChangesAsync();  
+            await _dbHome.CreateAsync(model);
             //return Ok(homeDto);    
 
 
@@ -125,14 +125,13 @@ namespace bijjam_API.Controllers
                
 
             }
-            var home = await _db.Homes.FirstOrDefaultAsync(u => u.Id == id);
+            var home = await _dbHome.GetAsync(u => u.Id == id);
             if (home == null)
             { 
             return NotFound();  
             
             }
-            _db.Homes.Remove(home); 
-            await _db.SaveChangesAsync();
+            await _dbHome.RemoveAsync(home);
             return NoContent(); // return ok() //using NoContent we can remove undocumented
         
         
@@ -162,8 +161,8 @@ namespace bijjam_API.Controllers
             //    Rate = UpdateDTO.Rate,
             //    Sqft = UpdateDTO.Sqft,
             //};
-            _db.Homes.Update(model);
-            await _db.SaveChangesAsync();
+           _dbHome.UpdateAsync(model);
+          
              return NoContent();
 
 
@@ -180,7 +179,7 @@ namespace bijjam_API.Controllers
                 return BadRequest();
             
             }
-            var home = await _db.Homes.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+            var home = await _dbHome.GetAsync(u => u.Id == id,tracked :false);
 
             HomeUpdateDTO homeDTO = _mapper.Map<HomeUpdateDTO>(home);
             // OR.................................
@@ -216,8 +215,7 @@ namespace bijjam_API.Controllers
             //    Rate = homeDTO.Rate,
             //    Sqft = homeDTO.Sqft,
             //};
-            _db.Homes.Update(model);
-            await _db.SaveChangesAsync();
+            await _dbHome.UpdateAsync(model);   
             return NoContent();
 
 

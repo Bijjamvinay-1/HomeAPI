@@ -1,5 +1,7 @@
 using bijjam_API;
 using bijjam_API.Data;
+using bijjam_API.Repository;
+using bijjam_API.Repository.IRepository;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
-
+builder.Services.AddScoped<IHomeRepository, HomeRepository>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddControllers().AddNewtonsoftJson();
