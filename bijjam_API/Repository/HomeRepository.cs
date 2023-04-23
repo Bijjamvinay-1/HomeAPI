@@ -7,62 +7,23 @@ using System.Linq.Expressions;
 
 namespace bijjam_API.Repository
 {
-    public class HomeRepository : IHomeRepository
+    public class HomeRepository : Repository<Home>, IHomeRepository
     {
         private readonly ApplicationDbContext _db;
-        public HomeRepository(ApplicationDbContext db) 
+        public HomeRepository(ApplicationDbContext db) : base(db) 
         {
             _db = db;   
         }
-        public async Task CreateAsync(Home entity)
-        {
-            await _db.Homes.AddAsync(entity);
-            await SaveAsync();
-        }
+       
 
-        
-
-        public async Task<Home> GetAsync(Expression<Func<Home,bool>> filter = null, bool tracked = true)
+        public async Task<Home> UpdateAsync(Home entity)
         {
-            IQueryable<Home> query = _db.Homes;
-            if(!tracked) 
-            {
-                query = query.AsNoTracking();
-            }
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-            return await query.FirstOrDefaultAsync();
-        }
-
-        public async Task<List<Home>> GetAllAsync(Expression<Func<Home, bool>> filter = null)
-        {
-            IQueryable<Home> query = _db.Homes;
-            if (filter != null) 
-            {
-                query = query.Where(filter);
-            }
-            return await query.ToListAsync();
-        }
-
-        public async Task RemoveAsync(Home entity)
-        {
-            _db.Homes.Remove(entity);
-            await SaveAsync();
-        }
-
-        public async Task SaveAsync()
-        {
-            await _db.SaveChangesAsync();   
-        }
-
-        public async Task UpdateAsync(Home entity)
-        {
+            entity.UpdatedDate = DateTime.Now;  
             _db.Homes.Update(entity);
-            await SaveAsync();  
+            await _db.SaveChangesAsync(); 
+            return entity;
         }
 
-        
+      
     }
 }

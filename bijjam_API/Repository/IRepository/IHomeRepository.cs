@@ -3,18 +3,11 @@ using System.Linq.Expressions;
 
 namespace bijjam_API.Repository.IRepository
 {
-    public interface IHomeRepository
+    public interface IHomeRepository : IRepository<Home>    
     {
 
-        Task<List<Home>>GetAllAsync(Expression<Func<Home,bool>>filter = null);
-        Task<Home> GetAsync(Expression<Func<Home, bool>> filter = null, bool tracked=true);
-        Task CreateAsync(Home entity);
-        Task UpdateAsync(Home entity);
-        Task RemoveAsync(Home entity);
-        
-        
-        Task SaveAsync(); 
-        
+        Task<Home> UpdateAsync(Home entity);
+
 
 
 
