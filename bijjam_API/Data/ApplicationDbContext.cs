@@ -9,6 +9,7 @@ namespace bijjam_API.Data
         { 
         } 
          public DbSet<Home>Homes { get; set; }
+        public DbSet<HomeNumber>HomeNumbers { get; set; }   
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

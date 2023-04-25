@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using bijjam_API.Data;
 
@@ -11,9 +12,11 @@ using bijjam_API.Data;
 namespace bijjamAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230425122625_AddHomeNumber2ToDb")]
+    partial class AddHomeNumber2ToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,7 +73,7 @@ namespace bijjamAPI.Migrations
                         {
                             Id = 1,
                             Amenity = "",
-                            CreatedDate = new DateTime(2023, 4, 25, 18, 39, 30, 16, DateTimeKind.Local).AddTicks(422),
+                            CreatedDate = new DateTime(2023, 4, 25, 17, 56, 25, 96, DateTimeKind.Local).AddTicks(3566),
                             Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://dotnetmasteryimages.blob.core.windows.net/bluevillaimages/villa3.jpg",
                             Name = "Royal Home",
@@ -83,7 +86,7 @@ namespace bijjamAPI.Migrations
                         {
                             Id = 2,
                             Amenity = "",
-                            CreatedDate = new DateTime(2023, 4, 25, 18, 39, 30, 16, DateTimeKind.Local).AddTicks(487),
+                            CreatedDate = new DateTime(2023, 4, 25, 17, 56, 25, 96, DateTimeKind.Local).AddTicks(3584),
                             Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://dotnetmasteryimages.blob.core.windows.net/bluevillaimages/villa1.jpg",
                             Name = "Premium Pool Home",
@@ -96,7 +99,7 @@ namespace bijjamAPI.Migrations
                         {
                             Id = 3,
                             Amenity = "",
-                            CreatedDate = new DateTime(2023, 4, 25, 18, 39, 30, 16, DateTimeKind.Local).AddTicks(490),
+                            CreatedDate = new DateTime(2023, 4, 25, 17, 56, 25, 96, DateTimeKind.Local).AddTicks(3587),
                             Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://dotnetmasteryimages.blob.core.windows.net/bluevillaimages/villa4.jpg",
                             Name = "Luxury Pool Home",
@@ -109,7 +112,7 @@ namespace bijjamAPI.Migrations
                         {
                             Id = 4,
                             Amenity = "",
-                            CreatedDate = new DateTime(2023, 4, 25, 18, 39, 30, 16, DateTimeKind.Local).AddTicks(493),
+                            CreatedDate = new DateTime(2023, 4, 25, 17, 56, 25, 96, DateTimeKind.Local).AddTicks(3589),
                             Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://dotnetmasteryimages.blob.core.windows.net/bluevillaimages/villa5.jpg",
                             Name = "Diamond Home",
@@ -122,7 +125,7 @@ namespace bijjamAPI.Migrations
                         {
                             Id = 5,
                             Amenity = "",
-                            CreatedDate = new DateTime(2023, 4, 25, 18, 39, 30, 16, DateTimeKind.Local).AddTicks(496),
+                            CreatedDate = new DateTime(2023, 4, 25, 17, 56, 25, 96, DateTimeKind.Local).AddTicks(3591),
                             Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://dotnetmasteryimages.blob.core.windows.net/bluevillaimages/villa2.jpg",
                             Name = "Diamond Pool Home",
@@ -135,7 +138,7 @@ namespace bijjamAPI.Migrations
 
             modelBuilder.Entity("bijjam_API.Model.HomeNumber", b =>
                 {
-                    b.Property<int>("HomeNo")
+                    b.Property<int>("HomeNO")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
@@ -148,7 +151,7 @@ namespace bijjamAPI.Migrations
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("HomeNo");
+                    b.HasKey("HomeNO");
 
                     b.ToTable("HomeNumbers");
                 });
